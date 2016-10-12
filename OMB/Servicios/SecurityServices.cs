@@ -11,18 +11,19 @@ namespace Servicios
 {
   public class SecurityServices
   {
-    /// <summary>
-    /// Este metodo permite crear un usuario en la DB, usando los datos ingresados desde la UI mas la password
-    /// Si no se puede crear, retornamos false
-    /// </summary>
-    /// <param name="user">Instancia ya creada de Usuario con los datos obligatorios y validos</param>
-    /// <param name="pass">Contraseña en </param>
-    public bool CrearUsuario(Usuario user, string pass)
+        OMBContext ctx = OMBContext.DB;
+        /// <summary>
+        /// Este metodo permite crear un usuario en la DB, usando los datos ingresados desde la UI mas la password
+        /// Si no se puede crear, retornamos false
+        /// </summary>
+        /// <param name="user">Instancia ya creada de Usuario con los datos obligatorios y validos</param>
+        /// <param name="pass">Contraseña en </param>
+        public bool CrearUsuario(Usuario user, string pass)
     {
       bool result = true;
-      OMBContext ctx = OMBContext.DB;
+      
 
-      if (!ValidarUsuario(user))
+      if (ValidarUsuario(user))
       {
         Console.WriteLine("No se pudo validar el usuario segun las reglas...");
         result = false;
@@ -91,9 +92,15 @@ namespace Servicios
     /// <returns></returns>
     private bool ValidarUsuario(Usuario user)
     {
-      //  TODO verificar que el login no este repetido
+           if (ctx.Usuarios.Where(us => us.Login == user.Login) != null)
+            {
+                return true;
+            } else {
+                return false;
+            }
+       //  TODO verificar que el login no este repetido
       //  TODO Asegurar que no se generen dos usuarios para un mismo Empleado
-      return true;
+      
     }
 
 

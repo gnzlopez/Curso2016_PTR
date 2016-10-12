@@ -1,4 +1,4 @@
-﻿#define PASO_4_5
+﻿#define PASO_8
 
 using System;
 using System.Collections.Generic;
@@ -257,9 +257,9 @@ namespace TestDatabase
 #endif
 
 #if PASO_6
-      //  Agregamos info de contacto
-      //
-      Persona persona = null;     //  TODO Traer una Persona desde la base de datos
+            //  Agregamos info de contacto
+            //
+      Persona persona = ctx.Personas.Where(per => per.Apellidos == "Thedy").FirstOrDefault();     //  TODO Traer una Persona desde la base de datos
       List<TipoContacto> tipos = ctx.TiposContacto.ToList();
 
       if (persona != null)
@@ -290,7 +290,13 @@ namespace TestDatabase
 
               string comentario = Console.ReadLine();
 
-              //  TODO Agregar el nuevo contacto a la Persona
+                            //  TODO Agregar el nuevo contacto a la Persona
+
+                            Contacto nuevoContacto = new Contacto();
+                            nuevoContacto.Dato = dato;
+                            nuevoContacto.Comentario = string.IsNullOrWhiteSpace(comentario) ? null : comentario;
+                            nuevoContacto.Tipo = tipos[numOpcion-1];
+                            persona.InfoContacto.Add(nuevoContacto);
             }
             else
             {
@@ -323,15 +329,15 @@ namespace TestDatabase
 #if PASO_7
       //  Agregamos Empleado asociado a Persona
       //
-      Persona persona = ctx.Personas.FirstOrDefault(per => per.Apellidos == "Thedy");
+      Persona persona = ctx.Personas.FirstOrDefault(per => per.Apellidos == "López");
 
       if (persona != null)
       {
         Empleado nuevo = new Empleado();
 
         nuevo.Persona = persona;
-        nuevo.Legajo = "167055";
-        nuevo.CUIT = "20-18339577-8";
+        nuevo.Legajo = "39495";
+        nuevo.CUIT = "20-36658036-1";
         nuevo.FechaIngreso = new DateTime(1986, 12, 9);
 
         ctx.Empleados.Add(nuevo);
@@ -342,16 +348,15 @@ namespace TestDatabase
 #if PASO_8
       //  Creamos un usuario y utilizamos el servicio para crearlo con su password
       //
-      Empleado empleado = ctx.Empleados.FirstOrDefault(emp => emp.Legajo == "167055");
+      Empleado empleado = ctx.Empleados.FirstOrDefault(emp => emp.Legajo == "39495");
       Usuario user = new Usuario();
       SecurityServices seg = new SecurityServices();
 
-      user.Login = "ethedy1";
+      user.Login = "gnzlopez";
       user.Empleado = empleado;
       user.Blocked = false;
 
-      if (seg.ValidarUsuario(user))
-      {
+      
         if (seg.CrearUsuario(user, "12345678"))
         {
           Console.WriteLine("Usuario creado correctamente");
@@ -360,11 +365,8 @@ namespace TestDatabase
         {
           Console.WriteLine("Error al crear el usuario");
         }
-      }
-      else
-      {
-        Console.WriteLine("Fallo la validacion del usuario");
-      }
+      
+      
 
 #endif
 

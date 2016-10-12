@@ -30,7 +30,8 @@
               Height="{Binding ElementName=btnShowLogin, Path=Height}">Logout</Button>
       <StackPanel Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" >
         <TextBox Margin="10" Width="250"></TextBox>
-        <Button Margin="10">Buscar</Button>
+        <Button Margin="10" RenderTransformOrigin="1,0">Buscar
+        </Button>
       </StackPanel>
     </Grid>
     <ContentControl Name="mainContent">
