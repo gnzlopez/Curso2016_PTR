@@ -1,10 +1,11 @@
-﻿#define PASO_8
+﻿#define PASO_9
 
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -256,10 +257,32 @@ namespace TestDatabase
       ctx.SaveChanges();
 #endif
 
+#if PASO_5_5
+      //  Modificar propiedades de alguna persona
+      Persona persona = ctx.Personas.Where(per => per.Apellidos == "Thedy").First();
+
+      persona.AmpliacionDomicilio = "Es el edificio de la esquina";
+
+      if (ctx.ChangeTracker.HasChanges())
+      {
+        Console.WriteLine("Guardando info de contacto");
+
+        ctx.MostrarCambios();
+        Console.ReadLine();
+
+        ctx.SaveChanges();
+      }
+      else
+      {
+        Console.WriteLine("No se detectaron cambios");
+      }
+#endif
+
 #if PASO_6
-            //  Agregamos info de contacto
-            //
-      Persona persona = ctx.Personas.Where(per => per.Apellidos == "Thedy").FirstOrDefault();     //  TODO Traer una Persona desde la base de datos
+      //  Agregamos info de contacto
+      //
+      //  TODO Traer una Persona desde la base de datos
+      Persona persona = ctx.Personas.Where(per => per.Apellidos == "Thedy").FirstOrDefault() ;     
       List<TipoContacto> tipos = ctx.TiposContacto.ToList();
 
       if (persona != null)
@@ -290,13 +313,14 @@ namespace TestDatabase
 
               string comentario = Console.ReadLine();
 
-                            //  TODO Agregar el nuevo contacto a la Persona
+              //  TODO Agregar el nuevo contacto a la Persona
+              Contacto nuevoContacto = new Contacto();
 
-                            Contacto nuevoContacto = new Contacto();
-                            nuevoContacto.Dato = dato;
-                            nuevoContacto.Comentario = string.IsNullOrWhiteSpace(comentario) ? null : comentario;
-                            nuevoContacto.Tipo = tipos[numOpcion-1];
-                            persona.InfoContacto.Add(nuevoContacto);
+              nuevoContacto.Dato = dato;
+              nuevoContacto.Comentario = string.IsNullOrWhiteSpace(comentario) ? null : comentario;
+              nuevoContacto.Tipo = tipos[numOpcion];
+
+              persona.InfoContacto.Add(nuevoContacto);
             }
             else
             {
@@ -311,8 +335,10 @@ namespace TestDatabase
         if (ctx.ChangeTracker.HasChanges())
         {
           Console.WriteLine("Guardando info de contacto");
-          //  ctx.MostrarCambios();
-          //  Console.ReadLine();
+
+          ctx.MostrarCambios();
+          Console.ReadLine();
+
           ctx.SaveChanges();
         }
         else
@@ -329,15 +355,15 @@ namespace TestDatabase
 #if PASO_7
       //  Agregamos Empleado asociado a Persona
       //
-      Persona persona = ctx.Personas.FirstOrDefault(per => per.Apellidos == "López");
+      Persona persona = ctx.Personas.FirstOrDefault(per => per.Apellidos == "Thedy");
 
       if (persona != null)
       {
         Empleado nuevo = new Empleado();
 
         nuevo.Persona = persona;
-        nuevo.Legajo = "39495";
-        nuevo.CUIT = "20-36658036-1";
+        nuevo.Legajo = "167055";
+        nuevo.CUIT = "20-18339577-8";
         nuevo.FechaIngreso = new DateTime(1986, 12, 9);
 
         ctx.Empleados.Add(nuevo);
@@ -348,25 +374,28 @@ namespace TestDatabase
 #if PASO_8
       //  Creamos un usuario y utilizamos el servicio para crearlo con su password
       //
-      Empleado empleado = ctx.Empleados.FirstOrDefault(emp => emp.Legajo == "39495");
+      Empleado empleado = ctx.Empleados.FirstOrDefault(emp => emp.Legajo == "167055");
       Usuario user = new Usuario();
       SecurityServices seg = new SecurityServices();
 
-      user.Login = "gnzlopez";
+      user.Login = "ethedy1";
       user.Empleado = empleado;
       user.Blocked = false;
 
-      
-        if (seg.CrearUsuario(user, "12345678"))
-        {
-          Console.WriteLine("Usuario creado correctamente");
-        }
-        else
-        {
-          Console.WriteLine("Error al crear el usuario");
-        }
-      
-      
+      if (seg.CrearUsuario(user, "12345678"))
+      {
+        Console.WriteLine("Usuario creado correctamente");
+      }
+      else
+      {
+        Console.WriteLine("Error al crear el usuario");
+      }
+
+#endif
+
+#if PASO_9
+
+      //  TODO agregar codigo para ingresar con el ID y password que asignamos a nuestro usuario
 
 #endif
 
@@ -387,6 +416,7 @@ namespace TestDatabase
 
             Console.WriteLine(showCat?.CategoriaID.ToString());
       */
+      Console.WriteLine("Press Any Key To Continue...");
       Console.ReadLine();
 
       ctx.Dispose();

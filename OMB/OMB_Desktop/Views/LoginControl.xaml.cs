@@ -19,13 +19,13 @@ using Entidades;
 namespace OMB_Desktop.Views
 {
   /// <summary>
-  /// Interaction logic for LoginUserControl.xaml
+  /// Interaction logic for LoginControl.xaml
   /// </summary>
-  public partial class LoginUserControl : UserControl
+  public partial class LoginControl : UserControl
   {
     public event EventHandler<Usuario> LoginOK;
 
-    public LoginUserControl()
+    public LoginControl()
     {
       InitializeComponent();
     }
@@ -34,12 +34,15 @@ namespace OMB_Desktop.Views
     {
       SecurityServices seg = new SecurityServices();
 
-      //  validar que usuario y password tengan contenido
+      //  Validar que usuario y password tengan contenido
       Usuario user = seg.LoginUsuario(txtUsuario.Text, txtPassword.Password);
+
       if (user != null)
       {
         MessageBox.Show("Usuario correctamente logueado!!!");
+        
         //  TODO: usuario o sesion?
+        //  Avisamos a quien quiera escuchar que hubo un login correcto...
         if (LoginOK != null)
           LoginOK(this, user);
       }
