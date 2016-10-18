@@ -19,5 +19,10 @@ namespace Entidades
 
         public virtual Localidad Localidad { get; set; }
 
+
+        public Editorial()
+        {
+            IDEditorial = Guid.NewGuid();
+        }
     }
 }

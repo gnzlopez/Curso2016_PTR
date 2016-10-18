@@ -1,5 +1,4 @@
-﻿#define PASO_10
-
+﻿#define PASO_11
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -364,7 +363,7 @@ namespace TestDatabase
         nuevo.Persona = persona;
         nuevo.Legajo = "39495";
         nuevo.CUIT = "20-36658036-1";
-        nuevo.FechaIngreso = new DateTime(1992, 15, 7);
+        nuevo.FechaIngreso = new DateTime(1992, 7, 15);
 
         ctx.Empleados.Add(nuevo);
         ctx.SaveChanges();
@@ -374,15 +373,15 @@ namespace TestDatabase
 #if PASO_8
       //  Creamos un usuario y utilizamos el servicio para crearlo con su password
       //
-      Empleado empleado = ctx.Empleados.FirstOrDefault(emp => emp.Legajo == "167055");
+      Empleado empleado = ctx.Empleados.FirstOrDefault(emp => emp.Legajo == "39495");
       Usuario user = new Usuario();
       SecurityServices seg = new SecurityServices();
 
-      user.Login = "ethedy1";
+      user.Login = "gnzlopez";
       user.Empleado = empleado;
       user.Blocked = false;
 
-      if (seg.CrearUsuario(user, "12345678"))
+      if (seg.CrearUsuario(user, "1212"))
       {
         Console.WriteLine("Usuario creado correctamente");
       }
@@ -403,11 +402,24 @@ namespace TestDatabase
 
             Editorial nueva = new Editorial();
 
-            nueva.Nombre = "Nueva editorial";
+            nueva.Nombre = "Rivadavia";
             ctx.Editoriales.Add(nueva);
             ctx.SaveChanges();
 
 
+#endif
+
+#if PASO_11
+
+            Libro nuevo = new Libro();
+           Console.WriteLine("Ingrese ISBN");
+          nuevo.Isbn = Console.ReadLine();
+            nuevo.Isbn10 = "zxc123";
+            Console.WriteLine("Ingrese Titulo");
+            nuevo.Titulo = Console.ReadLine();
+          nuevo.Editorial = ctx.Editoriales.FirstOrDefault(edi => edi.Nombre == "Rivadavia");
+            ctx.Libros.Add(nuevo);
+            ctx.SaveChanges();
 
 
 #endif

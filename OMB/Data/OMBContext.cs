@@ -299,14 +299,12 @@ namespace Data
     {
         public ConfigurarEditorial()
         {
+            this.ToTable("Editoriales");
             this.HasKey(edit => edit.IDEditorial);
 
             this.Property(edit => edit.IDEditorial)
               .HasColumnName("ID_Editorial");
-
-            this.Property(edit => edit.Nombre)
-              .HasColumnName("Nombre");
-
+            
             this.HasOptional(edit => edit.Localidad)
                 .WithMany()
                 .Map(cfg => cfg.MapKey("ID_Localidad"));
