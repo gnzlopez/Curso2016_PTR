@@ -1,4 +1,4 @@
-﻿#define PASO_9
+﻿#define PASO_10
 
 using System;
 using System.Collections.Generic;
@@ -355,16 +355,16 @@ namespace TestDatabase
 #if PASO_7
       //  Agregamos Empleado asociado a Persona
       //
-      Persona persona = ctx.Personas.FirstOrDefault(per => per.Apellidos == "Thedy");
-
+      Persona persona = ctx.Personas.FirstOrDefault(per => per.Apellidos == "López");
+      
       if (persona != null)
       {
         Empleado nuevo = new Empleado();
 
         nuevo.Persona = persona;
-        nuevo.Legajo = "167055";
-        nuevo.CUIT = "20-18339577-8";
-        nuevo.FechaIngreso = new DateTime(1986, 12, 9);
+        nuevo.Legajo = "39495";
+        nuevo.CUIT = "20-36658036-1";
+        nuevo.FechaIngreso = new DateTime(1992, 15, 7);
 
         ctx.Empleados.Add(nuevo);
         ctx.SaveChanges();
@@ -399,24 +399,36 @@ namespace TestDatabase
 
 #endif
 
-      /*
-            Categoria newCat = new Categoria() {Nombre = "Informatica", Parent = parent};
+#if PASO_10
 
-            ctx.Categorias.Add(newCat);
+            Editorial nueva = new Editorial();
 
-            parent.SubCategorias.Add(newCat);
+            nueva.Nombre = "Nueva editorial";
+            ctx.Editoriales.Add(nueva);
             ctx.SaveChanges();
 
 
-            //  ctx.Categorias.Load();
 
-            var showCat = ctx.Categorias.FirstOrDefault();
 
-              //.Where(categ => categ.Nombre == "Libros").First();
+#endif
+            /*
+                  Categoria newCat = new Categoria() {Nombre = "Informatica", Parent = parent};
 
-            Console.WriteLine(showCat?.CategoriaID.ToString());
-      */
-      Console.WriteLine("Press Any Key To Continue...");
+                  ctx.Categorias.Add(newCat);
+
+                  parent.SubCategorias.Add(newCat);
+                  ctx.SaveChanges();
+
+
+                  //  ctx.Categorias.Load();
+
+                  var showCat = ctx.Categorias.FirstOrDefault();
+
+                    //.Where(categ => categ.Nombre == "Libros").First();
+
+                  Console.WriteLine(showCat?.CategoriaID.ToString());
+            */
+            Console.WriteLine("Press Any Key To Continue...");
       Console.ReadLine();
 
       ctx.Dispose();

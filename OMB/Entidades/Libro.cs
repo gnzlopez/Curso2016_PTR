@@ -23,5 +23,5 @@ namespace Entidades
         
         public virtual Editorial Editorial { get; set; }
         }
-    }
+   
 }

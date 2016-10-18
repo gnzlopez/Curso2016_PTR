@@ -38,6 +38,11 @@ namespace Data
 
     public DbSet<Usuario> Usuarios { get; set; }
 
+    public DbSet<Libro> Libros { get; set; }
+
+    public DbSet<Editorial> Editoriales { get; set; }
+
+
     private StreamWriter writer;
 
     public static OMBContext DB
@@ -82,7 +87,10 @@ namespace Data
 
       modelBuilder.Configurations.Add(new ConfigurarEmpleado());
       modelBuilder.Configurations.Add(new ConfigurarUsuario());
-    }
+
+      modelBuilder.Configurations.Add(new ConfigurarLibro());
+      modelBuilder.Configurations.Add(new ConfigurarEditorial());
+        }
 
     public void MostrarCambios([CallerMemberName] string header = null)
     {
@@ -270,4 +278,38 @@ namespace Data
         .Map(cfg => cfg.MapKey("Legajo"));
     }
   }
+
+    public class ConfigurarLibro : EntityTypeConfiguration<Libro>
+    {
+        public ConfigurarLibro()
+        {
+            this.ToTable("Libros");
+            this.HasKey(lib => lib.IDLibro);
+
+            this.Property(lib => lib.IDLibro)
+              .HasColumnName("ID_Libro");
+
+            this.HasRequired(lib => lib.Editorial)
+              .WithMany()
+              .Map(cfg => cfg.MapKey("ID_Editorial"));
+        }
+    }
+
+    public class ConfigurarEditorial : EntityTypeConfiguration<Editorial>
+    {
+        public ConfigurarEditorial()
+        {
+            this.HasKey(edit => edit.IDEditorial);
+
+            this.Property(edit => edit.IDEditorial)
+              .HasColumnName("ID_Editorial");
+
+            this.Property(edit => edit.Nombre)
+              .HasColumnName("Nombre");
+
+            this.HasOptional(edit => edit.Localidad)
+                .WithMany()
+                .Map(cfg => cfg.MapKey("ID_Localidad"));
+        }
+    }
 }
