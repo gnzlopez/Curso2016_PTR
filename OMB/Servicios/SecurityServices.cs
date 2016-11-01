@@ -74,29 +74,53 @@ namespace Servicios
       return result;
     }
 
-    /// <summary>
-    /// Este es el metodo que se llamara desde la UI para concretar el login del Usuario, a partir del ID y de la password
-    /// El metodo retorna una instancia de Usuario, con el cual podriamos luego establecer una sesion
-    /// </summary>
-    /// <param name="login"></param>
-    /// <param name="password"></param>
-    /// <returns></returns>
-    public Usuario LoginUsuario(string login, string password)
-    {
-      Usuario result = null;
+        /// <summary>
+        /// Este es el metodo que se llamara desde la UI para concretar el login del Usuario, a partir del ID y de la password
+        /// El metodo retorna una instancia de Usuario, con el cual podriamos luego establecer una sesion
+        /// </summary>
+        /// <param name="login"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public Usuario LoginUsuario(string login, string password)
+        {
+            Usuario usuario;
+            OMBContext ctx = OMBContext.DB;
 
-      //  TODO Usar el metodo ValidateUserPasswordInternal para validar la combinacion user/password
-      //  TODO Sabiendo que la combinacion es valida, obtenemos los datos del usuario desde EF como hariamos normalmente
-      //  TODO Actualizar los datos de ultimo login correcto o no, guardar cambios!!
-      return result;
-    }
+            //  Intentamos obtener los datos del usuario desde EF como hariamos normalmente (puede que no exista!)
+            usuario = ctx.Usuarios.FirstOrDefault(usr => usr.Login == login);
 
-    /// <summary>
-    /// Permite chequear ciertas reglas de negocio respecto a la validez del usuario
-    /// </summary>
-    /// <param name="user"></param>
-    /// <returns></returns>
-    private bool ValidarUsuario(Usuario user)
+            ClearError();
+
+            //  Usar el metodo ValidateUserPasswordInternal para validar la combinacion user/password
+            if (usuario != null && ValidateUserPasswordInternal(login, password))
+            {
+                //  Actualizar los datos de ultimo login correcto o no, guardar cambios!!
+                usuario.LastSuccessLogin = DateTime.Now;
+                ctx.SaveChanges();
+            }
+            else
+            {
+                //  si la combinacion es invalida, setear el error correspondiente y luego intentar actualizar last failed login
+                //  este tambien seria un buen momento para incrementar y en cualquier caso bloquear el usuario por reintentos fallidos
+                //
+                ErrorInfo = "Las credenciales del usuario no son validas";
+                if (usuario != null)
+                {
+                    usuario.LastFailLogin = DateTime.Now;
+                    ctx.SaveChanges();
+
+                    usuario = null;
+                }
+            }
+            return usuario;
+        }
+
+        /// <summary>
+        /// Permite chequear ciertas reglas de negocio respecto a la validez del usuario
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        private bool ValidarUsuario(Usuario user)
     {
       //  TODO verificar que el login no este repetido
       //  TODO Asegurar que no se generen dos usuarios para un mismo Empleado
@@ -156,5 +180,9 @@ namespace Servicios
       }
       return result;
     }
-  }
+        private void ClearError()
+        {
+            ErrorInfo = null;
+        }
+    }
 }
