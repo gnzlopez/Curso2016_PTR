@@ -20,7 +20,13 @@ namespace OMB_MVC.Controllers
             {
                 return new HttpUnauthorizedResult("Usuario no existe");
             }
+            Session["USER"] = user;
             return View(user);
+        }
+
+        public ActionResult Ayuda()
+        {
+            return View();
         }
     }
 }

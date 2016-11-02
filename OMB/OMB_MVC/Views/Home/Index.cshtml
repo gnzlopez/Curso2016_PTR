@@ -1,26 +1,14 @@
 ﻿@model Entidades.Usuario
-
 @{
-    Layout = null;
     ViewBag.Title = "Index";
-
+    Layout = "~/Views/_LayoutPage.cshtml";
 }
-<!DOCTYPE html>
 
-<html>
-<head>
-    <meta name="viewport" content="width-device-width" />
-    <title>Index</title>
-</head>
+<h1>
+    @Html.LabelFor(usr => usr.Empleado.Persona.Nombres)
 
-<body>
-    <div>
-        <h1>
-            @Html.LabelFor(user => user.Empleado.Persona.Nombres)
-            @Html.TextBoxFor(user => user.Empleado.Persona.Nombres)
-        </h1>
-        <h2></h2>
-    </div>
-</body>
-</html>
+    @Html.ActionLink("Ayuda", "Ayuda", "Home")
+
+    @
+ </h1>
 
